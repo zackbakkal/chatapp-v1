@@ -1,59 +1,35 @@
 package com.zack.projects.chatapp.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-
-@Entity
-@Table(name = "users")
-public class User {
+public class Profile {
 	
-	@Id
-	@Column(name = "userName", nullable = false)
-	@NotBlank(message = "UserName is mandatory")
 	private String userName;
 	
-	@Column(name = "userEmail")
 	private String userEmail;
-	
-	@Column(name = "password", nullable = false)
-	private String password;
-	
-	public User() {
+
+	public Profile() {
 		super();
 	}
 
-	public User(String userName, String userEmail, String password) {
+	public Profile(String userName, String userEmail) {
 		super();
 		this.userName = userName;
 		this.userEmail = userEmail;
-		this.password = password;
 	}
-	
+
 	public String getUserName() {
 		return userName;
 	}
-	
+
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	
+
 	public String getUserEmail() {
 		return userEmail;
 	}
 
 	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
-	}
-	
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	@Override
@@ -72,7 +48,7 @@ public class User {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
+		Profile other = (Profile) obj;
 		if (userName == null) {
 			if (other.userName != null)
 				return false;
@@ -83,10 +59,8 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [userName=" + userName 
-				+ ", userEmail=" + userEmail + "]";
+		return "Profile [userName=" + userName + ", userEmail=" + userEmail + "]";
 	}
+	
 
-	
-	
 }
