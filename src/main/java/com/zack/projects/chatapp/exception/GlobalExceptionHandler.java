@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(ResourceExistsException.class)
 	public ResponseEntity<?> resourceExistsException(ResourceExistsException ex, WebRequest request) {
 		ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
-		return new ResponseEntity<>(errorDetails, HttpStatus.FOUND);
+		return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
 	}
 	
 	@ExceptionHandler(Exception.class)

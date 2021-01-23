@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
 <meta charset="utf-8">
 <meta name="viewport"
@@ -15,18 +15,33 @@
 <link
 	href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css"
 	rel="stylesheet" crossorigin="anonymous" />
+<link rel="stylesheet" href="/css/chatapp.css">
 </head>
 <style>
-body {
-	background-color: #3e3e3e;
-	color: white;
-}
 </style>
 <body>
-	<div class="container">
-		<form class="form-signin" method="get" action="/logout">
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Logout</button>
-		</form>
+	<div class="chatapp-container">
+		<div class="toppane">
+			<form method="get" th:action="@{/logout}">
+				<!--input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/-->
+				<span class="username">[[${#httpServletRequest.remoteUser}]]</span>
+				<button class="btn btn-sm btn-primary float-r" type="submit">Logout</button>
+			</form>
+		</div>
+		<div class="leftpane">
+			<div id="online-users-title">Active Users</div>
+			<!--div id="online-users-null" th:if="${onlineusers.empty}">Nobody is online</div-->
+<!-- 			<div id="online-users" th:if="${onlineusers != null}"> -->
+<!-- 				<ul id="online-users-list" th:each="user: ${onlineusers}"> -->
+<!-- 					<li id="online-user" th:text="${user.username}"></li> -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+		</div>
+		<div class="middlepane"></div>
+		<div class="rightpane">
+			<div id="offline-users-title">Offline Users</div>
+			<div id="offline-users-list"></div>
+		</div>
 	</div>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
 <meta charset="utf-8">
 <meta name="viewport"
@@ -15,16 +15,11 @@
 <link
 	href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css"
 	rel="stylesheet" crossorigin="anonymous" />
+<link rel="stylesheet" type="text/css" href="/css/login.css">
 </head>
-<style>
-body {
-	background-color: #3e3e3e;
-	color: white;
-}
-</style>
 <body>
 	<div class="container">
-		<form class="form-signin" method="post" action="/login">
+		<form class="form-signin" method="post" th:action="@{/login}">
 			<h2 class="form-signin-heading">Login to ChatApp</h2>
 			<p>
 				<label for="username" class="sr-only">Username</label> <input
@@ -40,7 +35,11 @@ body {
 				<input type="checkbox" id="remember-me" name="remember-me">
 				<label for="remember-me">Remember me?</label>
 			</p>
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+			<div>
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+				<!-- Warning sign, &#9888; -->
+				<p th:if="${loginError}" class="login-error">&#9888; Authentication failed.</p>
+			</div>
 		</form>
 		<form class="form-signin" method="get" action="/register">
 			<p>
@@ -48,5 +47,6 @@ body {
 			</p>
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
 		</form>
+	</div>
 </body>
 </html>

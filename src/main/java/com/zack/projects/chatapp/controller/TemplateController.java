@@ -22,7 +22,18 @@ public class TemplateController {
 	// login
 	@GetMapping("login")
 	public String getLoginView() {
+		
 		return "login";
+		
+	}
+	
+	// login-error
+	@GetMapping("login-error")
+	public String getLoginErrorView(Model model) {
+		
+		model.addAttribute("loginError", true);
+		return "login";
+			
 	}
 	
 	// Open registration form
@@ -31,6 +42,7 @@ public class TemplateController {
 		
 		model.addAttribute("user", new User());
 		return "register";		
+		
 	}
 	
 	@PostMapping("register")
@@ -39,6 +51,7 @@ public class TemplateController {
 			final RedirectAttributes redirectAttributes) throws ResourceExistsException {
 		
 		redirectAttributes.addAttribute("user", this.userController.addUser(user));
+		
 		return "registersuccessful";
 		
 	}
@@ -46,7 +59,9 @@ public class TemplateController {
 	// Open chatapp home page
 	@GetMapping("chatapp")
 	public String getChatapp() {
+		
 		return "chatapp";
+		
 	}
 
 }

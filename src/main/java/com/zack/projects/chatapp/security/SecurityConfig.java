@@ -9,9 +9,11 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.zack.projects.chatapp.service.ApplicationUserService;
@@ -50,6 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.defaultSuccessUrl("/chatapp", true)
 				.passwordParameter("password")
 				.usernameParameter("username")
+//				.failureHandler(authenticationFailureHandler())
+				.failureUrl("/login-error")		
 			.and()
 			.rememberMe().tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(21))
 				.key("usesecuredkey")
@@ -64,36 +68,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.logoutSuccessUrl("/login")
 			;
 	}
-
-//	@Override
-//	@Bean
-//	protected UserDetailsService userDetailsService() {
-//
-//		List<UserDetails> userList = new ArrayList<>();
-//
-//		this.userRepository
-//			.findAll()
-//			.stream()
-//			.forEach(user -> userList.add(
-//					User.builder()
-//					.username(user.getUserName())
-//					.password(passwordEncoder.encode(user.getPassword()))
-//					.authorities(USER.getGrantedAuthorities())
-//					.build()));
-//
-//		this.adminRepository
-//			.findAll()
-//			.stream()
-//			.forEach(admin -> userList.add(
-//					User.builder()
-//					.username(admin.getAdminUserName())
-//					.password(passwordEncoder.encode(admin.getPassword()))
-//					.authorities(ADMIN.getGrantedAuthorities())
-//					.build()));
-//
-//		return new InMemoryUserDetailsManager(userList);
-//
-//	}
+	
+	@Override
+	public void configure(WebSecurity web) {
+		web.ignoring().antMatchers("/css/**", "/js/**");
+	}
 	
 	@Bean
 	public DaoAuthenticationProvider daoAuthenticationProvider() {
@@ -110,4 +89,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(daoAuthenticationProvider());
 	}
+	
+	@Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
+    }
 }

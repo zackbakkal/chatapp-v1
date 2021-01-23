@@ -33,6 +33,18 @@ public class UserController {
 		return this.userService.getUsers();
 	}
 	
+	@GetMapping("/online")
+	@PreAuthorize("hasRole('ROLE_USER')")
+	public List<Profile> getOnlineUsers() {
+		return this.userService.getOnlineUsers();
+	}
+	
+	@GetMapping("/offline")
+	@PreAuthorize("hasRole('ROLE_USER')")
+	public List<Profile> getOfflineUsers() {
+		return this.userService.getOfflineUsers();
+	}
+	
 	// Get User by id
 	@GetMapping("{userName}")
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -43,16 +55,6 @@ public class UserController {
 		return this.userService.getUserByUserName(userName);
 		
 	}
-	
-	// Add User
-//	@PostMapping("adduser")
-//	@PreAuthorize("hasRole('ROLE_USER')")
-//	public User addUser(@Valid @RequestBody User user) 
-//			throws ResourceExistsException {
-//		
-//		return this.userService.addUser(user);
-//		
-//	}
 	
 	public User addUser(User user) throws ResourceExistsException {
 		

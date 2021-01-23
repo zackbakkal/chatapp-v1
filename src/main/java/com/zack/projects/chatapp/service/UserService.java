@@ -35,6 +35,48 @@ public class UserService {
 		return profileList;
 
 	}
+	
+	// Get online users
+	public List<Profile> getOnlineUsers() {
+		
+		List<User> userList = this.userRepository.findAll();
+		
+		List<Profile> profileList = new ArrayList<>();
+		
+		userList
+			.stream()
+			.forEach(user -> {
+				if(user.isOnline()) {
+					Profile profile = new Profile(user.getUserName(), user.getUserEmail());
+					profileList.add(profile);
+				}
+			});
+		
+		System.out.println(profileList);
+		
+		return profileList;
+		
+	}
+	
+	// Get online users
+	public List<Profile> getOfflineUsers() {
+		
+		List<User> userList = this.userRepository.findAll();
+		
+		List<Profile> profileList = new ArrayList<>();
+		
+		userList
+			.stream()
+			.forEach(user -> {
+				if(!user.isOnline()) {
+					Profile profile = new Profile(user.getUserName(), user.getUserEmail());
+					profileList.add(profile);
+				}
+			});
+		
+		return profileList;
+		
+	}
 
 	// Get User by id
 	public Profile getUserByUserName(String userName)
@@ -61,6 +103,8 @@ public class UserService {
 			throw new ResourceExistsException(
 					"User name [" + user.getUserName() + "] is not available.");
 		}
+		
+		user.activateAcount();
 		
 		return this.userRepository.save(user);
 
@@ -96,5 +140,15 @@ public class UserService {
 		return user;
 
 	}
+	
+	// Set user online
+	public void setUserOnline(User user) {
+		user.setOnline(true);;
+	}
+	
+	// Set user offline
+		public void setUserOffline(User user) {
+			user.setOnline(false);;
+		}
 
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.google.common.collect.Lists;
 import com.zack.projects.chatapp.auth.ApplicationUser;
 import com.zack.projects.chatapp.dao.ApplicationUserDao;
+import com.zack.projects.chatapp.model.User;
 import com.zack.projects.chatapp.repository.UserRepository;
 import static com.zack.projects.chatapp.security.UserRole.*;
 
@@ -21,18 +22,31 @@ public class ApplicationUserDaoService implements ApplicationUserDao {
 
 	@Autowired
 	private final PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private final UserService userService;
 
-	public ApplicationUserDaoService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+	public ApplicationUserDaoService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserService userService) {
 		super();
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.userService = userService;
 	}
 
 	@Override
 	public Optional<ApplicationUser> selectChatappApplicationUserByUserName(String username) {
-		return getApplicationUsers().stream()
-				.filter(applicationUser -> username.equals(applicationUser.getUsername()))
+		
+		Optional<ApplicationUser> applicationUser = getApplicationUsers().stream()
+				.filter(appUser -> username.equals(appUser.getUsername()))
 				.findFirst();
+		
+		if(applicationUser.isPresent()) {
+			User user = this.userRepository.findById(applicationUser.get().getUsername()).get();
+			this.userService.setUserOnline(user);
+			this.userRepository.save(user);
+		}
+		
+		return applicationUser;
 	}
 
 	private List<ApplicationUser> getApplicationUsers() {
@@ -42,11 +56,16 @@ public class ApplicationUserDaoService implements ApplicationUserDao {
 		userRepository.findAll()
 					.stream()
 					.forEach(user 
-							-> 	applicationUsers.add(new ApplicationUser(
-									USER.getGrantedAuthorities(),
-									passwordEncoder.encode(user.getPassword()),
-									user.getUserName(),
-									true, true, true, true)));
+							-> {
+									applicationUsers.add(new ApplicationUser(
+											USER.getGrantedAuthorities(),
+											passwordEncoder.encode(user.getPassword()),
+											user.getUserName(),
+											user.isAccountNonExpired(),
+											user.isAccountNonLocked(),
+											user.isCredentialsNonExpired(),
+											user.isEnabled()));
+							});
 		
 		return applicationUsers;
 							

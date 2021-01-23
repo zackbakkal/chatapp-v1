@@ -21,15 +21,42 @@ public class User {
 	@Column(name = "password", nullable = false)
 	private String password;
 	
+	@Column(name = "isAccountNonExpired")
+	private boolean isAccountNonExpired;
+	
+	@Column(name = "isAccountNonLocked")
+	private boolean isAccountNonLocked;
+	
+	@Column(name = "isCredentialsNonExpired")
+	private boolean isCredentialsNonExpired;
+	
+	@Column(name = "isEnabled")
+	private boolean isEnabled;
+	
+	@Column(name = "isOnline")
+	private boolean isOnline;
+	
 	public User() {
 		super();
 	}
 
-	public User(String userName, String userEmail, String password) {
+	public User(String userName, 
+			String userEmail, 
+			String password, 
+			boolean isAccountNonExpired, 
+			boolean isAccountNonLocked, 
+			boolean isCredentialsNonExpired, 
+			boolean isEnabled,
+			boolean isOnline) {
 		super();
 		this.userName = userName;
 		this.userEmail = userEmail;
 		this.password = password;
+		this.isAccountNonExpired = isAccountNonExpired;
+		this.isAccountNonLocked = isAccountNonLocked;
+		this.isCredentialsNonExpired = isCredentialsNonExpired;
+		this.isEnabled = isEnabled;
+		this.isOnline = isOnline;
 	}
 	
 	public String getUserName() {
@@ -54,6 +81,59 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public boolean isAccountNonExpired() {
+		return isAccountNonExpired;
+	}
+
+	public void setAccountNonExpired(boolean isAccountNonExpired) {
+		this.isAccountNonExpired = isAccountNonExpired;
+	}
+
+	public boolean isAccountNonLocked() {
+		return isAccountNonLocked;
+	}
+
+	public void setAccountNonLocked(boolean isAccountNonLocked) {
+		this.isAccountNonLocked = isAccountNonLocked;
+	}
+
+	public boolean isCredentialsNonExpired() {
+		return isCredentialsNonExpired;
+	}
+
+	public void setCredentialsNonExpired(boolean isCredentialsNonExpired) {
+		this.isCredentialsNonExpired = isCredentialsNonExpired;
+	}
+
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
+	}
+
+	public void activateAcount() {
+		setAccountNonExpired(true);
+		setAccountNonLocked(true);
+		setCredentialsNonExpired(true);
+		setEnabled(true);
+		setOnline(false);
+	}
+	
+	public boolean isAccountActive() {
+		return isAccountNonExpired() && isAccountNonLocked() && isCredentialsNonExpired() && isEnabled();
+	}
+	
+
+	public boolean isOnline() {
+		return isOnline;
+	}
+
+	public void setOnline(boolean isOnline) {
+		this.isOnline = isOnline;
 	}
 
 	@Override
